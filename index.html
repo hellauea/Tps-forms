@@ -939,6 +939,21 @@ body {
 
     <!-- STEP 2: Student Details -->
     <div class="form-step-panel" id="form-step-2" style="display:none">
+      
+      <!-- Persistent Class/Branch Banner -->
+      <div class="card" style="background: var(--green-50); border: 1px solid var(--border); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 20px;">🏫</span>
+          <div style="text-align: left;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--green-600); text-transform: uppercase; letter-spacing: .05em;">Current Class Setup</div>
+            <div id="form-current-setup" style="font-size: 15px; font-weight: 700; color: var(--green-900);">Loading setup...</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost" style="padding: 6px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--border); height: auto; min-height: unset;" onclick="goStep(1)">
+          Change Class
+        </button>
+      </div>
+
       <div class="card">
         <div class="section-label">
           <div class="section-label-icon">👤</div>
@@ -1398,7 +1413,7 @@ function validateStep2() {
   const pemerg = fv('f-pemerg');
   
   const phoneOk = pphone && isValidPhone(pphone);
-  const emergOk = pemerg && isValidPhone(emergOk || pemerg);
+  const emergOk = pemerg && isValidPhone(pemerg);
   
   se('e-sname', !sname); markField('f-sname', !sname);
   se('e-sdob', !sdob); markField('f-sdob', !sdob);
@@ -1421,6 +1436,17 @@ function goStep(stepNum) {
   if (stepNum === 3) buildFormPreview();
   
   selectedFormStep = stepNum;
+  
+  if (stepNum === 2) {
+    // Populate persistent class banner at the top of Step 2
+    const bId = fv('form-branch');
+    const cId = fv('form-class');
+    const bObj = branchesData.find(b => b.branch_id === bId);
+    const cObj = bObj ? bObj.classes.find(c => c.class_id === cId) : null;
+    
+    document.getElementById('form-current-setup').textContent = 
+      (bObj && cObj) ? `${bObj.name} — Class ${cObj.class_name}` : 'No setup selected';
+  }
   
   // Show / hide step panel elements
   for (let i = 1; i <= 3; i++) {
@@ -1525,11 +1551,65 @@ async function submitForm() {
       }
       document.getElementById('form-step-success').style.display = 'block';
       document.getElementById('progress-bar').style.width = '100%';
+    } else if (res.status === 409 && data.exists) {
+      // DUPLICATE DETECTED
+      const overwrite = confirm(`A student named "${payload.student_name}" with DOB "${payload.date_of_birth}" already exists in this class.\n\nClick OK to OVERWRITE and update their details with this information, or CANCEL to SKIP adding this student.`);
+      if (overwrite) {
+        await overwriteExistingStudent(data.student_id, data.parent_id, payload);
+      } else {
+        alert('Skipped adding student.');
+        resetFormForNext();
+      }
     } else {
       alert(data.error || 'Server rejected enrollment query.');
     }
   } catch (err) {
     alert('Connection failure. Please check internet connection.');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Save & Enroll Next Student';
+  }
+}
+
+async function overwriteExistingStudent(studentId, parentId, payload) {
+  const passcode = localStorage.getItem('tps_teacher_passcode');
+  const btn = document.getElementById('submit-student-btn');
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader-spinner"></span>Overwriting details...';
+  
+  const updatePayload = {
+    ...payload,
+    parent_id: parentId
+  };
+  
+  try {
+    const res = await fetch(`${API}/teacher-form/student/${studentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Teacher-Passcode': passcode
+      },
+      body: JSON.stringify(updatePayload)
+    });
+    const data = await res.json();
+    
+    if (res.ok && data.success) {
+      clearFormDraft();
+      document.getElementById('success-message').textContent = `${payload.student_name}'s profile has been updated and re-saved in the database successfully.`;
+      
+      // Hide all standard steps and display Success Card
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById('form-step-' + i).style.display = 'none';
+      }
+      document.getElementById('form-step-success').style.display = 'block';
+      document.getElementById('progress-bar').style.width = '100%';
+    } else {
+      alert(data.error || 'Failed to overwrite existing student.');
+    }
+  } catch (err) {
+    alert('Connection failure. Failed to overwrite details.');
     console.error(err);
   } finally {
     btn.disabled = false;
