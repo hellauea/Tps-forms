@@ -1138,9 +1138,14 @@ body {
         </div>
       </div>
       
-      <button class="btn btn-primary" style="width:100%" onclick="openModalEditMode()">
+      <button class="btn btn-primary" style="width:100%; margin-bottom: 10px;" onclick="openModalEditMode()">
         <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Edit Profile
+      </button>
+
+      <button class="btn" style="width:100%; color:var(--err); border: 1.5px solid rgba(192, 57, 43, 0.2); background: rgba(192, 57, 43, 0.02); display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="confirmDeleteStudent()" id="delete-student-btn">
+        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--err);fill:none;stroke-width:2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+        Delete Student Profile
       </button>
     </div>
 
@@ -1919,6 +1924,58 @@ async function submitEdit() {
   } finally {
     btn.disabled = false;
     btn.innerHTML = 'Save Changes';
+  }
+}
+
+async function confirmDeleteStudent() {
+  const s = currentEditingStudent;
+  if (!s) return;
+
+  const passcode = localStorage.getItem('tps_teacher_passcode');
+  
+  // Prompt user for passcode to verify delete authorization
+  const inputCode = prompt(`⚠️ WARNING: You are about to deactivate and remove "${s.student_name}" from the student directory.\n\nTo confirm, please enter the Portal Passcode below:`);
+  
+  if (inputCode === null) {
+    // User cancelled
+    return;
+  }
+  
+  if (inputCode !== passcode) {
+    alert("❌ Error: Incorrect passcode. Deletion aborted.");
+    return;
+  }
+
+  const btn = document.getElementById('delete-student-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader-spinner"></span>Deactivating...';
+
+  try {
+    const res = await fetch(`${API}/teacher-form/student/${s.student_id}`, {
+      method: 'DELETE',
+      headers: {
+        'X-Teacher-Passcode': passcode
+      }
+    });
+    
+    const data = await res.json();
+    
+    if (res.ok && data.success) {
+      alert(`Student profile "${s.student_name}" has been successfully removed.`);
+      closeModal();
+      loadStudentsDirectory();
+    } else {
+      alert(data.error || 'Server rejected deletion request.');
+    }
+  } catch (err) {
+    alert('Connection failure. Failed to complete deletion request.');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--err);fill:none;stroke-width:2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+      Delete Student Profile
+    `;
   }
 }
 </script>
