@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Portal — Twinkling Petals School</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Lora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; color-scheme: light; }
+
+:root {
+  --green-900: #0a1f0e;
+  --green-800: #103317;
+  --green-700: #174b21;
+  --green-600: #20642d;
+  --green-500: #2b823c;
+  --green-400: #3ea352;
+  --green-300: #62c375;
+  --green-200: #93e1a2;
+  --green-100: #c6f4d0;
+  --green-50:  #ebfbf0;
+  --bg:        #f3faf5;
+  --white:     #ffffff;
+  --text:      #0e2613;
+  --text-2:    #22472a;
+  --text-3:    #406a4a;
+  --text-4:    #769f7e;
+  --border:    #badfc2;
+  --border-2:  #daf0e0;
+  --err:       #c0392b;
+  --err-bg:    #fdf2f2;
+  --success:   #27ae60;
+  
+  --shadow-sm: 0 2px 6px rgba(16, 51, 23, 0.03);
+  --shadow-md: 0 4px 20px rgba(16, 51, 23, 0.06);
+  --shadow-lg: 0 10px 30px rgba(16, 51, 23, 0.1);
+  --glass-bg:  rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.4);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 60px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ───────────────────────────────────── */
+.header {
+  background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 100%);
+  padding: 30px 24px 24px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 30%, rgba(98,195,117,.15) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(98,195,117,.1) 0%, transparent 40%);
+}
+.header-inner {
+  position: relative; z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.school-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--green-300);
+}
+.school-name::before {
+  content: '';
+  display: block;
+  width: 16px; height: 1px;
+  background: var(--green-400);
+}
+.header h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(22px, 4.5vw, 30px);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.01em;
+}
+.header-desc {
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  max-width: 450px;
+  line-height: 1.5;
+}
+
+/* ── SECURITY BAR ────────────────────────────── */
+.sec-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.1);
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  color: var(--green-200);
+  backdrop-filter: blur(4px);
+}
+.sec-dot {
+  width: 6px; height: 6px;
+  background: var(--green-300);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--green-300);
+}
+.logout-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.5);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  transition: color .2s;
+  text-decoration: underline;
+}
+.logout-btn:hover { color: #fff; }
+
+/* ── TABS NAVIGATION ──────────────────────────── */
+.tabs-nav {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 5px;
+  border-radius: 14px;
+  align-self: flex-start;
+  margin-top: 4px;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid rgba(255,255,255,.05);
+}
+.tab-btn {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: rgba(255,255,255,.6);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .25s ease;
+}
+.tab-btn.active {
+  background: var(--white);
+  color: var(--green-900);
+  box-shadow: var(--shadow-sm);
+}
+.tab-btn.active svg { stroke: var(--green-600); }
+.tab-btn svg {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+}
+
+/* ── PROGRESS BAR ─────────────────────────────── */
+.progress-track {
+  height: 3px;
+  background: rgba(0,0,0,.08);
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--green-400);
+  width: 0%;
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── CONTAINER ────────────────────────────────── */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* ── PASSCODE SCREEN ──────────────────────────── */
+.auth-panel {
+  max-width: 400px;
+  margin: 60px auto;
+  animation: slideUp .4s ease;
+}
+.auth-title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.auth-title h2 {
+  font-family: 'Lora', serif;
+  font-size: 24px;
+  color: var(--green-900);
+}
+.auth-title p {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 6px;
+}
+
+/* ── CARD ─────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border-2);
+  border-radius: 20px;
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform .2s, box-shadow .2s;
+}
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--green-600);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-2);
+}
+.section-label-icon {
+  width: 28px; height: 28px;
+  background: var(--green-50);
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+
+/* ── FORMS & FIELDS ───────────────────────────── */
+.field { margin-bottom: 18px; position: relative; }
+.field:last-child { margin-bottom: 0; }
+
+.field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 8px;
+}
+.badge-req {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--green-50);
+  color: var(--green-600);
+  border: 1px solid var(--border-2);
+}
+.badge-opt {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: #f7f7f5;
+  color: #a0a09e;
+  border: 1px solid #eaeaeb;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--white);
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  appearance: auto;
+}
+.field input::placeholder { color: var(--text-4); }
+.field input:focus,
+.field select:focus {
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 4px rgba(43,130,60,.12);
+}
+.field select:disabled {
+  background: #f4faf5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.field .hint {
+  font-size: 12px;
+  color: var(--text-4);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+.field .err {
+  font-size: 12px;
+  color: var(--err);
+  margin-top: 5px;
+  display: none;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+.field .err::before { content: '⚠'; font-size: 12px; }
+.field input.invalid,
+.field select.invalid {
+  border-color: var(--err) !important;
+  box-shadow: 0 0 0 4px rgba(192,57,43,.1) !important;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── STEPS INDICATOR ──────────────────────────── */
+.steps-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.step-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.step-circle {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text-4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+}
+.step-circle.active {
+  background: var(--green-600);
+  border-color: var(--green-600);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(32,100,45,.15);
+}
+.step-circle.done {
+  background: var(--green-600);
+  border-color: var(--green-600);
+  color: #fff;
+}
+.step-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-4);
+  transition: color .3s;
+}
+.step-label.active { color: var(--green-600); font-weight: 700; }
+.step-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-2);
+  margin: 0 8px 18px;
+  transition: background .3s;
+}
+.step-line.done { background: var(--green-300); }
+
+/* ── BUTTONS ──────────────────────────────────── */
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text-2);
+  transition: all .2s;
+}
+.btn:hover:not(:disabled) {
+  background: var(--green-50);
+  border-color: var(--green-400);
+  color: var(--green-700);
+}
+.btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--green-600);
+  border-color: var(--green-600);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(32,100,45,.18);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--green-700);
+  border-color: var(--green-700);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-3);
+}
+.btn-ghost:hover {
+  background: var(--green-50);
+  color: var(--green-800);
+}
+.btn svg {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+}
+
+/* ── PANELS ───────────────────────────────────── */
+.view-panel { display: none; }
+.view-panel.active { display: block; animation: slideUp .4s ease; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── REVIEW GRID ──────────────────────────────── */
+.review-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+.review-item {
+  background: var(--green-50);
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+.review-item .rl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  margin-bottom: 4px;
+}
+.review-item .rv {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+/* ── SUCCESS ANIMATION ────────────────────────── */
+.success-screen {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+.success-circle {
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  background: var(--green-100);
+  border: 1.5px solid var(--green-200);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  animation: pulseSuccess 2s infinite;
+}
+@keyframes pulseSuccess {
+  0% { box-shadow: 0 0 0 0 rgba(98,195,117,.3); }
+  70% { box-shadow: 0 0 0 12px rgba(98,195,117,0); }
+  100% { box-shadow: 0 0 0 0 rgba(98,195,117,0); }
+}
+.success-circle svg {
+  width: 32px; height: 32px;
+  stroke: var(--green-600);
+  fill: none;
+  stroke-width: 2.8;
+}
+.success-screen h2 {
+  font-family: 'Lora', serif;
+  font-size: 26px;
+  color: var(--green-900);
+  margin-bottom: 12px;
+}
+.success-screen p {
+  font-size: 14px;
+  color: var(--text-3);
+  max-width: 340px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+/* ── DIRECTORY STYLING ────────────────────────── */
+.directory-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.search-wrapper {
+  flex: 1;
+  position: relative;
+}
+.search-wrapper input {
+  width: 100%;
+  padding: 13px 14px 13px 44px;
+  font-size: 15px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  outline: none;
+  transition: all .2s;
+  box-shadow: var(--shadow-sm);
+}
+.search-wrapper input:focus {
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 4px rgba(43,130,60,.12);
+}
+.search-icon {
+  position: absolute;
+  left: 16px; top: 50%;
+  transform: translateY(-50%);
+  width: 18px; height: 18px;
+  stroke: var(--text-4);
+  fill: none;
+  stroke-width: 2;
+}
+
+.branch-select-wrap {
+  width: 200px;
+}
+.branch-select-wrap select {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── DIRECTORY GROUPS ─────────────────────────── */
+.class-group {
+  margin-bottom: 28px;
+}
+.class-group:last-child { margin-bottom: 0; }
+
+.class-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--border-2);
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--green-900);
+  box-shadow: var(--shadow-sm);
+  transition: background .2s;
+}
+.class-header:hover {
+  background: var(--green-50);
+}
+.class-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.class-student-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--green-100);
+  color: var(--green-700);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+.class-toggle-icon {
+  width: 16px; height: 16px;
+  stroke: var(--text-3);
+  fill: none;
+  stroke-width: 2.2;
+  transition: transform .2s;
+}
+.class-group.collapsed .class-toggle-icon {
+  transform: rotate(-90deg);
+}
+.class-group.collapsed .student-list {
+  display: none;
+}
+
+.student-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  animation: slideUp .2s ease;
+}
+
+.student-card {
+  background: var(--white);
+  border: 1px solid var(--border-2);
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all .2s;
+  box-shadow: var(--shadow-sm);
+}
+.student-card:hover {
+  border-color: var(--green-300);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.student-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green-900);
+}
+.student-meta {
+  font-size: 12px;
+  color: var(--text-3);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.student-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.student-meta-item svg {
+  width: 14px; height: 14px;
+  stroke: var(--text-4);
+  fill: none;
+  stroke-width: 2;
+}
+
+.student-card-btn {
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-600);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.student-card-btn svg {
+  width: 14px; height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+}
+
+/* ── NO DATA OR LOADER ────────────────────────── */
+.no-data {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-4);
+}
+.no-data svg {
+  width: 48px; height: 48px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  margin-bottom: 12px;
+  opacity: .5;
+}
+.no-data h3 { font-size: 16px; font-weight: 600; color: var(--text-3); }
+.no-data p { font-size: 13px; margin-top: 4px; }
+
+/* ── MODAL SLIDE-OVER ─────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,31,14,.4);
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  display: none;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.modal-overlay.active {
+  display: block;
+  opacity: 1;
+}
+.modal-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: 100%;
+  max-width: 460px;
+  background: var(--white);
+  box-shadow: -4px 0 30px rgba(0,0,0,.15);
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.modal-overlay.active .modal-panel {
+  transform: translateX(0);
+}
+.modal-header {
+  padding: 20px 24px;
+  background: var(--green-900);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h2 {
+  font-family: 'Lora', serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.7);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all .2s;
+}
+.modal-close:hover {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+}
+.modal-close svg {
+  width: 20px; height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+/* ── INLINE DETAIL CARD ───────────────────────── */
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.detail-block {
+  background: var(--bg);
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.detail-block .dl {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-4);
+  letter-spacing: .06em;
+  margin-bottom: 4px;
+}
+.detail-block .dv {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.loader-spinner {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+  margin-right: 6px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── RESPONSIVENESS ───────────────────────────── */
+@media (max-width: 768px) {
+  .student-list { grid-template-columns: 1fr; }
+  .grid2 { grid-template-columns: 1fr; gap: 0; }
+  .directory-controls { flex-direction: column; }
+  .branch-select-wrap { width: 100%; }
+}
+@media (max-width: 480px) {
+  .review-grid { grid-template-columns: 1fr; }
+  .card { padding: 20px 16px; }
+  .container { padding: 16px 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="school-name">Twinkling Petals School</div>
+      <div class="sec-bar" id="sec-bar" style="display:none">
+        <div class="sec-dot"></div>
+        <span>Teacher Portal</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+    <h1>Teacher Entry Dashboard</h1>
+    <p class="header-desc" id="header-desc">Please verify your credentials below to access batch student registration and student directory management.</p>
+    
+    <!-- Tab switcher (Visible after auth) -->
+    <div class="tabs-nav" id="tabs-nav" style="display:none">
+      <button class="tab-btn active" id="tab-form" onclick="switchView('form')">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Batch Add Students
+      </button>
+      <button class="tab-btn" id="tab-dir" onclick="switchView('directory')">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Student Directory
+      </button>
+    </div>
+  </div>
+</div>
+<div class="progress-track"><div class="progress-fill" id="progress-bar"></div></div>
+
+<div class="container">
+
+  <!-- ================= AUTH PANEL ================= -->
+  <div class="auth-panel" id="auth-panel">
+    <div class="card" style="text-align: center;">
+      <div class="auth-title">
+        <h2>Passcode Required</h2>
+        <p>Enter the secure portal access code shared by the administration.</p>
+      </div>
+      <div class="field" style="margin-bottom:24px;">
+        <input type="password" id="f-auth-code" placeholder="••••••••" style="text-align:center; font-size:20px; letter-spacing:4px">
+        <div class="err" id="e-auth-code" style="justify-content:center">Access Code is required.</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="authenticateTeacher()" id="auth-btn">
+        Verify Portal Access
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= BATCH FORM MODE ================= -->
+  <div class="view-panel" id="panel-form">
+    <!-- Steps Indicator -->
+    <div class="steps-row">
+      <div class="step-dot">
+        <div class="step-circle active" id="sc1">1</div>
+        <div class="step-label active" id="sl1">Setup</div>
+      </div>
+      <div class="step-line" id="ln1"></div>
+      <div class="step-dot">
+        <div class="step-circle" id="sc2">2</div>
+        <div class="step-label" id="sl2">Details</div>
+      </div>
+      <div class="step-line" id="ln2"></div>
+      <div class="step-dot">
+        <div class="step-circle" id="sc3">3</div>
+        <div class="step-label" id="sl3">Preview</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: Branch Setup -->
+    <div class="form-step-panel active" id="form-step-1">
+      <div class="card">
+        <div class="section-label">
+          <div class="section-label-icon">🏫</div>
+          Select School Branch & Class
+        </div>
+        <p style="font-size:13px; color:var(--text-3); margin-bottom:20px; line-height:1.5">
+          Select the branch and class where students will be added. You can add multiple students to this selected class sequentially.
+        </p>
+        <div class="grid2">
+          <div class="field">
+            <label>Branch <span class="badge-req">required</span></label>
+            <select id="form-branch" onchange="onFormBranchChange()">
+              <option value="">Loading branches...</option>
+            </select>
+            <div class="err" id="e-form-branch">Branch selection is required.</div>
+          </div>
+          <div class="field">
+            <label>Class <span class="badge-req">required</span></label>
+            <select id="form-class" disabled>
+              <option value="">Select branch first</option>
+            </select>
+            <div class="err" id="e-form-class">Class selection is required.</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <span></span>
+        <button class="btn btn-primary" onclick="goStep(2)">
+          Enter Student Details
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Student Details -->
+    <div class="form-step-panel" id="form-step-2" style="display:none">
+      <div class="card">
+        <div class="section-label">
+          <div class="section-label-icon">👤</div>
+          Student Profile Details
+        </div>
+        <div class="field">
+          <label>Child's Full Name <span class="badge-req">required</span></label>
+          <input type="text" id="f-sname" placeholder="e.g. Aarav Sharma" autocomplete="off" oninput="saveDraft()">
+          <div class="err" id="e-sname">Student name is required.</div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>Date of Birth <span class="badge-req">required</span></label>
+            <input type="date" id="f-sdob" oninput="saveDraft()">
+            <div class="err" id="e-sdob">Date of birth is required.</div>
+          </div>
+          <div class="field">
+            <label>Admission Date <span class="badge-opt">optional</span></label>
+            <input type="date" id="f-sadm" oninput="saveDraft()">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-label">
+          <div class="section-label-icon">👨‍👩‍👦</div>
+          Primary Parent / Guardian details
+        </div>
+        <div class="field">
+          <label>Parent's Full Name <span class="badge-req">required</span></label>
+          <input type="text" id="f-pname" placeholder="e.g. Rajesh Sharma" autocomplete="off" oninput="saveDraft()">
+          <div class="err" id="e-pname">Parent name is required.</div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>Mobile Number <span class="badge-req">required</span></label>
+            <input type="tel" id="f-pphone" placeholder="e.g. 9876543210" oninput="saveDraft()">
+            <div class="err" id="e-pphone">Valid 10-digit phone number is required.</div>
+            <div class="hint">Numbers are saved automatically in standard +91 format.</div>
+          </div>
+          <div class="field">
+            <label>Emergency Contact <span class="badge-req">required</span></label>
+            <input type="tel" id="f-pemerg" placeholder="e.g. 9876543210" oninput="saveDraft()">
+            <div class="err" id="e-pemerg">Valid emergency contact is required.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goStep(1)">
+          <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back
+        </button>
+        <button class="btn btn-primary" onclick="goStep(3)">
+          Preview Profile
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Preview and Submit -->
+    <div class="form-step-panel" id="form-step-3" style="display:none">
+      <div class="card">
+        <div class="section-label">
+          <div class="section-label-icon">🔍</div>
+          Verify Student & Parent Profile
+        </div>
+        <p style="font-size:13px; color:var(--text-3); margin-bottom:16px;">
+          Confirm all information is correct. Click "Save and Add Next" to save this student and instantly begin enrolling another.
+        </p>
+        <div class="review-grid" id="preview-grid">
+          <!-- Dynamic review blocks -->
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goStep(2)">
+          <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back to Details
+        </button>
+        <button class="btn btn-primary" onclick="submitForm()" id="submit-student-btn">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Save & Enroll Next Student
+        </button>
+      </div>
+    </div>
+
+    <!-- SUCCESS INTERMEDIARY SCREEN -->
+    <div class="form-step-panel" id="form-step-success" style="display:none">
+      <div class="card success-screen">
+        <div class="success-circle">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2>Student Enrolled Successfully!</h2>
+        <p id="success-message">Aarav Sharma has been saved directly to the database and linked to parent Rajesh Sharma.</p>
+        <div style="display:flex; justify-content:center; gap:12px">
+          <button class="btn btn-primary" onclick="resetFormForNext()">
+            Add Another Student
+          </button>
+          <button class="btn" onclick="switchView('directory')">
+            Go to Directory
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= STUDENT DIRECTORY MODE ================= -->
+  <div class="view-panel" id="panel-directory">
+    <!-- Directory search and filter -->
+    <div class="directory-controls">
+      <div class="search-wrapper">
+        <input type="text" id="dir-search" placeholder="Search students by name or parent phone..." oninput="filterDirectory()">
+        <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="branch-select-wrap">
+        <select class="field" id="dir-branch" onchange="filterDirectory()">
+          <option value="ALL">All Branches</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="directory-content">
+      <!-- Grouped by Class classes will display here dynamically -->
+    </div>
+  </div>
+
+</div>
+
+<!-- ================= MODAL SLIDE-OVER DETAIL & EDIT ================= -->
+<div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
+  <div class="modal-panel" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="modal-title">Student Profile Details</h2>
+      <button class="modal-close" onclick="closeModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    
+    <!-- View student detail block -->
+    <div class="modal-content" id="modal-view-content">
+      <div class="detail-list">
+        <div class="detail-block">
+          <div class="dl">Student Name</div>
+          <div class="dv" id="d-sname">—</div>
+        </div>
+        <div class="grid2">
+          <div class="detail-block">
+            <div class="dl">Branch</div>
+            <div class="dv" id="d-sbranch">—</div>
+          </div>
+          <div class="detail-block">
+            <div class="dl">Class</div>
+            <div class="dv" id="d-sclass">—</div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="detail-block">
+            <div class="dl">Date of Birth</div>
+            <div class="dv" id="d-sdob">—</div>
+          </div>
+          <div class="detail-block">
+            <div class="dl">Admission Date</div>
+            <div class="dv" id="d-sadm">—</div>
+          </div>
+        </div>
+        
+        <div style="margin-top:10px; font-size:12px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.05em">Linked Parent Info</div>
+        
+        <div class="detail-block">
+          <div class="dl">Parent Name</div>
+          <div class="dv" id="d-pname">—</div>
+        </div>
+        <div class="grid2">
+          <div class="detail-block">
+            <div class="dl">Parent Phone</div>
+            <div class="dv" id="d-pphone">—</div>
+          </div>
+          <div class="detail-block">
+            <div class="dl">Emergency Contact</div>
+            <div class="dv" id="d-pemerg">—</div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" style="width:100%" onclick="openModalEditMode()">
+        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Edit Profile
+      </button>
+    </div>
+
+    <!-- Edit student detail block -->
+    <div class="modal-content" id="modal-edit-content" style="display:none">
+      <div class="card" style="padding:16px; margin-bottom:16px;">
+        <div class="section-label" style="margin-bottom:14px; padding-bottom:8px;">Student Info</div>
+        <div class="field">
+          <label>Full Name <span class="badge-req">required</span></label>
+          <input type="text" id="edit-f-sname">
+          <div class="err" id="edit-e-sname">Student name is required.</div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>Branch <span class="badge-req">required</span></label>
+            <select id="edit-f-branch" onchange="onEditBranchChange()">
+              <option value="">Select branch</option>
+            </select>
+            <div class="err" id="edit-e-branch">Branch is required.</div>
+          </div>
+          <div class="field">
+            <label>Class <span class="badge-req">required</span></label>
+            <select id="edit-f-class">
+              <option value="">Select class</option>
+            </select>
+            <div class="err" id="edit-e-class">Class is required.</div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>Date of Birth <span class="badge-req">required</span></label>
+            <input type="date" id="edit-f-sdob">
+            <div class="err" id="edit-e-sdob">Date of birth is required.</div>
+          </div>
+          <div class="field">
+            <label>Admission Date <span class="badge-opt">optional</span></label>
+            <input type="date" id="edit-f-sadm">
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px; margin-bottom:16px;">
+        <div class="section-label" style="margin-bottom:14px; padding-bottom:8px;">Parent / Guardian Info</div>
+        <div class="field">
+          <label>Parent's Name <span class="badge-req">required</span></label>
+          <input type="text" id="edit-f-pname">
+          <div class="err" id="edit-e-pname">Parent name is required.</div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>Parent Phone <span class="badge-req">required</span></label>
+            <input type="tel" id="edit-f-pphone">
+            <div class="err" id="edit-e-pphone">Valid phone number is required.</div>
+          </div>
+          <div class="field">
+            <label>Emergency Contact <span class="badge-req">required</span></label>
+            <input type="tel" id="edit-f-pemerg">
+            <div class="err" id="edit-e-pemerg">Emergency contact is required.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px">
+        <button class="btn btn-ghost" style="flex:1" onclick="cancelModalEditMode()">
+          Cancel
+        </button>
+        <button class="btn btn-primary" style="flex:1" onclick="submitEdit()" id="edit-save-btn">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Dynamic API Resolution (resolves localhost dynamically to prevent local dev CORS issues)
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000'
+  : 'https://tps-backend-fn67.onrender.com';
+
+// State Management variables
+let branchesData = []; // Full raw branches and nested classes
+let studentsList = []; // List of all active students
+let selectedFormStep = 1;
+let currentView = 'form';
+let currentEditingStudent = null; // The student currently opened in modal
+let collapsedClasses = {}; // Track collapse states in directory
+
+// Set admission dates defaults on page loads
+document.getElementById('f-sadm').value = new Date().toISOString().split('T')[0];
+
+// On document load, check auth in local storage
+window.addEventListener('DOMContentLoaded', () => {
+  const code = localStorage.getItem('tps_teacher_passcode');
+  if (code) {
+    document.getElementById('f-auth-code').value = code;
+    authenticateTeacher();
+  }
+  
+  // Try restoring form drafts in case page was reloaded
+  restoreFormDraft();
+});
+
+// Helper inputs functions
+function fv(id) { return document.getElementById(id).value.trim(); }
+function fvs(id, val) { document.getElementById(id).value = val || ''; }
+function se(id, show) { document.getElementById(id).style.display = show ? 'flex' : 'none'; }
+function markField(id, invalid) {
+  const el = document.getElementById(id);
+  invalid ? el.classList.add('invalid') : el.classList.remove('invalid');
+}
+function isValidPhone(v) {
+  return /^\+?[\d\s\-]{10,15}$/.test(v) && v.replace(/\D/g,'').length >= 10;
+}
+
+// ── AUTHENTICATION ─────────────────────────────
+async function authenticateTeacher() {
+  const code = fv('f-auth-code');
+  const btn = document.getElementById('auth-btn');
+  const err = document.getElementById('e-auth-code');
+  
+  if (!code) {
+    err.style.display = 'flex';
+    markField('f-auth-code', true);
+    return;
+  }
+  
+  err.style.display = 'none';
+  markField('f-auth-code', false);
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader-spinner"></span>Verifying Access...';
+  
+  try {
+    // Attempt fetching branches list as confirmation of passcode authorization
+    const res = await fetch(`${API}/teacher-form/branches-classes`, {
+      headers: { 'X-Teacher-Passcode': code }
+    });
+    const data = await res.json();
+    
+    if (res.ok && data.success) {
+      // Auth Success! Store credentials and unlock dashboard
+      localStorage.setItem('tps_teacher_passcode', code);
+      branchesData = data.branches;
+      
+      // Hide auth panel and show workspace dashboard
+      document.getElementById('auth-panel').style.display = 'none';
+      document.getElementById('sec-bar').style.display = 'flex';
+      document.getElementById('tabs-nav').style.display = 'flex';
+      document.getElementById('header-desc').textContent = 'Welcome back. Use this dashboard to batch enroll students into classes and edit student records.';
+      
+      // Initialize branch selectors in Form Setup and Directory dropdowns
+      populateBranchSelectors();
+      
+      // Load student list
+      loadStudentsDirectory();
+      
+      // Open form mode view
+      switchView('form');
+    } else {
+      localStorage.removeItem('tps_teacher_passcode');
+      err.textContent = data.error || 'Access denied. Incorrect passcode.';
+      err.style.display = 'flex';
+      markField('f-auth-code', true);
+    }
+  } catch (err) {
+    alert('Network error. Failed to establish connection with database.');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Verify Portal Access';
+  }
+}
+
+function logout() {
+  if (confirm('Are you sure you want to lock and exit the teacher portal?')) {
+    localStorage.removeItem('tps_teacher_passcode');
+    location.reload();
+  }
+}
+
+// ── VIEWS CONTROLS ─────────────────────────────
+function switchView(view) {
+  currentView = view;
+  
+  // Highlight tab button
+  document.getElementById('tab-form').classList.toggle('active', view === 'form');
+  document.getElementById('tab-dir').classList.toggle('active', view === 'directory');
+  
+  // Display target panel
+  document.getElementById('panel-form').style.display = view === 'form' ? 'block' : 'none';
+  document.getElementById('panel-directory').style.display = view === 'directory' ? 'block' : 'none';
+  
+  if (view === 'form') {
+    goStep(selectedFormStep);
+  } else {
+    // If opening directory, trigger loading new database profiles
+    loadStudentsDirectory();
+    document.getElementById('progress-bar').style.width = '100%';
+  }
+}
+
+// ── POPULATE DATA ──────────────────────────────
+function populateBranchSelectors() {
+  const formBranch = document.getElementById('form-branch');
+  const dirBranch = document.getElementById('dir-branch');
+  const editBranch = document.getElementById('edit-f-branch');
+  
+  let branchOptions = '<option value="">Select branch</option>';
+  let dirOptions = '<option value="ALL">All Branches</option>';
+  
+  branchesData.forEach(b => {
+    branchOptions += `<option value="${b.branch_id}">${b.name}</option>`;
+    dirOptions += `<option value="${b.branch_id}">${b.name}</option>`;
+  });
+  
+  formBranch.innerHTML = branchOptions;
+  editBranch.innerHTML = branchOptions;
+  dirBranch.innerHTML = dirOptions;
+}
+
+function onFormBranchChange() {
+  const bId = fv('form-branch');
+  const classSelect = document.getElementById('form-class');
+  
+  classSelect.innerHTML = '<option value="">Select class</option>';
+  classSelect.disabled = !bId;
+  
+  if (bId) {
+    const branch = branchesData.find(b => b.branch_id === bId);
+    if (branch && branch.classes) {
+      branch.classes.forEach(c => {
+        classSelect.innerHTML += `<option value="${c.class_id}">${c.class_name}</option>`;
+      });
+    }
+  }
+}
+
+function onEditBranchChange() {
+  const bId = fv('edit-f-branch');
+  const classSelect = document.getElementById('edit-f-class');
+  
+  classSelect.innerHTML = '<option value="">Select class</option>';
+  
+  if (bId) {
+    const branch = branchesData.find(b => b.branch_id === bId);
+    if (branch && branch.classes) {
+      branch.classes.forEach(c => {
+        classSelect.innerHTML += `<option value="${c.class_id}">${c.class_name}</option>`;
+      });
+    }
+  }
+}
+
+// ── BATCH ENROLLMENT STEPS CONTROLLERS ──────────
+function validateStep1() {
+  const b = fv('form-branch');
+  const c = fv('form-class');
+  
+  se('e-form-branch', !b); markField('form-branch', !b);
+  se('e-form-class', !c); markField('form-class', !c);
+  
+  return !!(b && c);
+}
+
+function validateStep2() {
+  const sname = fv('f-sname');
+  const sdob = fv('f-sdob');
+  const pname = fv('f-pname');
+  const pphone = fv('f-pphone');
+  const pemerg = fv('f-pemerg');
+  
+  const phoneOk = pphone && isValidPhone(pphone);
+  const emergOk = pemerg && isValidPhone(emergOk || pemerg);
+  
+  se('e-sname', !sname); markField('f-sname', !sname);
+  se('e-sdob', !sdob); markField('f-sdob', !sdob);
+  se('e-pname', !pname); markField('f-pname', !pname);
+  se('e-pphone', !phoneOk); markField('f-pphone', !phoneOk);
+  se('e-pemerg', !emergOk); markField('f-pemerg', !emergOk);
+  
+  if (pphone && !phoneOk) document.getElementById('e-pphone').textContent = '⚠ Enter a valid 10-digit number.';
+  else if (!pphone) document.getElementById('e-pphone').textContent = '⚠ Phone number is required.';
+  
+  if (pemerg && !emergOk) document.getElementById('e-pemerg').textContent = '⚠ Enter a valid emergency number.';
+  else if (!pemerg) document.getElementById('e-pemerg').textContent = '⚠ Emergency number is required.';
+  
+  return !!(sname && sdob && pname && phoneOk && emergOk);
+}
+
+function goStep(stepNum) {
+  if (stepNum === 2 && !validateStep1()) return;
+  if (stepNum === 3 && !validateStep2()) return;
+  if (stepNum === 3) buildFormPreview();
+  
+  selectedFormStep = stepNum;
+  
+  // Show / hide step panel elements
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById('form-step-' + i);
+    if (el) el.style.display = i === stepNum ? 'block' : 'none';
+    
+    // Manage step dots active status
+    const sc = document.getElementById('sc' + i);
+    const sl = document.getElementById('sl' + i);
+    if (sc) {
+      if (i < stepNum) {
+        sc.className = 'step-circle done';
+        sc.textContent = '✓';
+      } else if (i === stepNum) {
+        sc.className = 'step-circle active';
+        sc.textContent = i;
+      } else {
+        sc.className = 'step-circle';
+        sc.textContent = i;
+      }
+    }
+    if (sl) sl.className = 'step-label' + (i === stepNum ? ' active' : '');
+    
+    // Manage track line active status
+    if (i < 3) {
+      const ln = document.getElementById('ln' + i);
+      if (ln) ln.className = 'step-line' + (i < stepNum ? ' done' : '');
+    }
+  }
+  
+  document.getElementById('form-step-success').style.display = 'none';
+  document.getElementById('progress-bar').style.width = (stepNum / 3 * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildFormPreview() {
+  const bId = fv('form-branch');
+  const cId = fv('form-class');
+  const bObj = branchesData.find(b => b.branch_id === bId);
+  const cObj = bObj ? bObj.classes.find(c => c.class_id === cId) : null;
+  
+  const items = [
+    ["Student Name", fv('f-sname')],
+    ["Selected Branch", bObj ? bObj.name : ''],
+    ["Selected Class", cObj ? cObj.class_name : ''],
+    ["Date of Birth", fv('f-sdob')],
+    ["Admission Date", fv('f-sadm') || '—'],
+    ["Parent / Guardian Name", fv('f-pname')],
+    ["Parent Mobile Phone", fv('f-pphone')],
+    ["Emergency Contact", fv('f-pemerg')]
+  ];
+  
+  document.getElementById('preview-grid').innerHTML = items
+    .map(([lbl, val]) => `
+      <div class="review-item">
+        <div class="rl">${lbl}</div>
+        <div class="rv" title="${val}">${val}</div>
+      </div>`)
+    .join('');
+}
+
+// ── SAVE AND BATCH NEXT STUDENT ─────────────────
+async function submitForm() {
+  const passcode = localStorage.getItem('tps_teacher_passcode');
+  const btn = document.getElementById('submit-student-btn');
+  
+  const payload = {
+    student_name: fv('f-sname'),
+    branch_id: fv('form-branch'),
+    class_id: fv('form-class'),
+    date_of_birth: fv('f-sdob'),
+    admission_date: fv('f-sadm'),
+    parent_name: fv('f-pname'),
+    phone: fv('f-pphone'),
+    emergency_contact: fv('f-pemerg')
+  };
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader-spinner"></span>Saving to Database...';
+  
+  try {
+    const res = await fetch(`${API}/teacher-form/student`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Teacher-Passcode': passcode
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    const data = await res.json();
+    
+    if (res.ok && data.success) {
+      // Success! Clear drafts, show success page
+      clearFormDraft();
+      
+      document.getElementById('success-message').textContent = `${payload.student_name} has been enrolled into branch and linked with parent ${payload.parent_name}.`;
+      
+      // Hide all standard steps and display Success Card
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById('form-step-' + i).style.display = 'none';
+      }
+      document.getElementById('form-step-success').style.display = 'block';
+      document.getElementById('progress-bar').style.width = '100%';
+    } else {
+      alert(data.error || 'Server rejected enrollment query.');
+    }
+  } catch (err) {
+    alert('Connection failure. Please check internet connection.');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Save & Enroll Next Student';
+  }
+}
+
+// Reset form for adding NEXT student, keeping setup locks (Branch/Class)
+function resetFormForNext() {
+  fvs('f-sname', '');
+  fvs('f-sdob', '');
+  // Keep admission date as today's date
+  document.getElementById('f-sadm').value = new Date().toISOString().split('T')[0];
+  fvs('f-pname', '');
+  fvs('f-pphone', '');
+  fvs('f-pemerg', '');
+  
+  // Go back to Details entry (Step 2)
+  goStep(2);
+}
+
+// LocalDraft cache helper in case page refreshes accidentally
+function saveDraft() {
+  const draft = {
+    sname: fv('f-sname'),
+    sdob: fv('f-sdob'),
+    sadm: fv('f-sadm'),
+    pname: fv('f-pname'),
+    pphone: fv('f-pphone'),
+    pemerg: fv('f-pemerg')
+  };
+  localStorage.setItem('tps_teacher_draft', JSON.stringify(draft));
+}
+
+function restoreFormDraft() {
+  try {
+    const raw = localStorage.getItem('tps_teacher_draft');
+    if (!raw) return;
+    const draft = JSON.parse(raw);
+    fvs('f-sname', draft.sname);
+    fvs('f-sdob', draft.sdob);
+    fvs('f-sadm', draft.sadm);
+    fvs('f-pname', draft.pname);
+    fvs('f-pphone', draft.pphone);
+    fvs('f-pemerg', draft.pemerg);
+  } catch(e) {
+    console.error('Failed to restore form draft:', e);
+  }
+}
+
+function clearFormDraft() {
+  localStorage.removeItem('tps_teacher_draft');
+}
+
+// ── DIRECTORY DATA LOADER ───────────────────────
+async function loadStudentsDirectory() {
+  const passcode = localStorage.getItem('tps_teacher_passcode');
+  const dirContent = document.getElementById('directory-content');
+  
+  dirContent.innerHTML = '<div class="loader" style="text-align:center; padding:50px"><span class="loader-spinner" style="border-top-color:var(--green-600); width:32px; height:32px"></span><h3 style="margin-top:12px; color:var(--text-3)">Loading Student Database...</h3></div>';
+  
+  try {
+    const res = await fetch(`${API}/teacher-form/students`, {
+      headers: { 'X-Teacher-Passcode': passcode }
+    });
+    const data = await res.json();
+    
+    if (res.ok && data.success) {
+      studentsList = data.students;
+      renderDirectory();
+    } else {
+      dirContent.innerHTML = `<div class="no-data"><h3>Failed to query data</h3><p>${data.error || 'Unauthorized access'}</p></div>`;
+    }
+  } catch (err) {
+    dirContent.innerHTML = `<div class="no-data"><h3>Connection Error</h3><p>Could not connect to the school API server.</p></div>`;
+  }
+}
+
+// ── DIRECTORY RENDERING & SEARCH ────────────────
+function renderDirectory() {
+  const branchFilter = fv('dir-branch');
+  const query = fv('dir-search').toLowerCase();
+  const dirContent = document.getElementById('directory-content');
+  
+  // Filter list by selected branch & search query
+  const filtered = studentsList.filter(s => {
+    const matchesBranch = (branchFilter === 'ALL' || s.branch_id === branchFilter);
+    const matchesSearch = !query || 
+      s.student_name.toLowerCase().includes(query) ||
+      s.class_name.toLowerCase().includes(query) ||
+      (s.parent_name && s.parent_name.toLowerCase().includes(query)) ||
+      (s.parent_phone && s.parent_phone.includes(query));
+      
+    return matchesBranch && matchesSearch;
+  });
+  
+  if (filtered.length === 0) {
+    dirContent.innerHTML = `<div class="no-data"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><h3>No profiles found</h3><p>Refine your search term or select a different school branch.</p></div>`;
+    return;
+  }
+  
+  // Group students by Class
+  const groups = {};
+  filtered.forEach(s => {
+    const key = s.class_name;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(s);
+  });
+  
+  // Compile structured list elements
+  let html = '';
+  Object.entries(groups).sort().forEach(([className, list]) => {
+    const isCollapsed = collapsedClasses[className] === true;
+    
+    html += `
+      <div class="class-group ${isCollapsed ? 'collapsed' : ''}" id="group-${className}">
+        <div class="class-header" onclick="toggleClassGroup('${className}')">
+          <div class="class-header-left">
+            <span>Class ${className}</span>
+            <span class="class-student-badge">${list.length} student${list.length > 1 ? 's' : ''}</span>
+          </div>
+          <svg class="class-toggle-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="student-list">
+          ${list.map(s => `
+            <div class="student-card" onclick="openStudentDetails('${s.student_id}')">
+              <div>
+                <h3>${s.student_name}</h3>
+                <div class="student-meta" style="margin-top:8px">
+                  <div class="student-meta-item">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    <span>Parent: ${s.parent_name || 'Not Linked'}</span>
+                  </div>
+                  <div class="student-meta-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 9.24v3z"/></svg>
+                    <span>Phone: ${s.parent_phone || '—'}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="student-card-btn">
+                <span>View & Edit</span>
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  });
+  
+  dirContent.innerHTML = html;
+}
+
+function toggleClassGroup(className) {
+  const grp = document.getElementById('group-' + className);
+  collapsedClasses[className] = !collapsedClasses[className];
+  
+  if (collapsedClasses[className]) {
+    grp.classList.add('collapsed');
+  } else {
+    grp.classList.remove('collapsed');
+  }
+}
+
+function filterDirectory() {
+  renderDirectory();
+}
+
+// ── SLIDE-OVER DETAIL MODAL CONTROLLERS ────────
+function openStudentDetails(sId) {
+  const s = studentsList.find(x => x.student_id === sId);
+  if (!s) return;
+  
+  currentEditingStudent = s;
+  
+  // Render dynamic text fields in detail overlay block
+  document.getElementById('d-sname').textContent = s.student_name;
+  document.getElementById('d-sbranch').textContent = s.branch_name;
+  document.getElementById('d-sclass').textContent = s.class_name;
+  document.getElementById('d-sdob').textContent = s.dob ? s.dob.split('T')[0] : '—';
+  document.getElementById('d-sadm').textContent = s.admission_date ? s.admission_date.split('T')[0] : '—';
+  
+  document.getElementById('d-pname').textContent = s.parent_name || '—';
+  document.getElementById('d-pphone').textContent = s.parent_phone || '—';
+  document.getElementById('d-pemerg').textContent = s.emergency_contact || '—';
+  
+  // Set window modals to Active visible
+  const modal = document.getElementById('detail-modal');
+  modal.style.display = 'block';
+  setTimeout(() => modal.classList.add('active'), 10);
+  
+  // Default to View Panel visible
+  document.getElementById('modal-view-content').style.display = 'block';
+  document.getElementById('modal-edit-content').style.display = 'none';
+  document.getElementById('modal-title').textContent = "Student Profile Details";
+}
+
+function closeModal(e) {
+  const modal = document.getElementById('detail-modal');
+  modal.classList.remove('active');
+  setTimeout(() => modal.style.display = 'none', 300);
+}
+
+// ── SLIDE-OVER INLINE EDIT MODE ────────────────
+function openModalEditMode() {
+  const s = currentEditingStudent;
+  if (!s) return;
+  
+  document.getElementById('modal-view-content').style.display = 'none';
+  document.getElementById('modal-edit-content').style.display = 'block';
+  document.getElementById('modal-title').textContent = "Modify Profile Details";
+  
+  // Pre-fill input value structures
+  fvs('edit-f-sname', s.student_name);
+  fvs('edit-f-sdob', s.dob ? s.dob.split('T')[0] : '');
+  fvs('edit-f-sadm', s.admission_date ? s.admission_date.split('T')[0] : '');
+  fvs('edit-f-pname', s.parent_name);
+  fvs('edit-f-pphone', s.parent_phone);
+  fvs('edit-f-pemerg', s.emergency_contact);
+  
+  // Bind Branch setup and update nested Classes dynamically
+  fvs('edit-f-branch', s.branch_id);
+  onEditBranchChange();
+  fvs('edit-f-class', s.class_id);
+  
+  // Reset field validations errors
+  const errIds = ['sname','dob','branch','class','pname','pphone','pemerg'];
+  errIds.forEach(id => {
+    se('edit-e-' + id, false);
+    markField('edit-f-' + id, false);
+  });
+}
+
+function cancelModalEditMode() {
+  // Go back to Detail viewer panel
+  document.getElementById('modal-view-content').style.display = 'block';
+  document.getElementById('modal-edit-content').style.display = 'none';
+  document.getElementById('modal-title').textContent = "Student Profile Details";
+}
+
+function validateEditForm() {
+  const sname = fv('edit-f-sname');
+  const sdob = fv('edit-f-sdob');
+  const branch = fv('edit-f-branch');
+  const cls = fv('edit-f-class');
+  const pname = fv('edit-f-pname');
+  const pphone = fv('edit-f-pphone');
+  const pemerg = fv('edit-f-pemerg');
+  
+  const phoneOk = pphone && isValidPhone(pphone);
+  const emergOk = pemerg && isValidPhone(pemerg);
+  
+  se('edit-e-sname', !sname); markField('edit-f-sname', !sname);
+  se('edit-e-sdob', !sdob); markField('edit-f-sdob', !sdob);
+  se('edit-e-branch', !branch); markField('edit-f-branch', !branch);
+  se('edit-e-class', !cls); markField('edit-f-class', !cls);
+  se('edit-e-pname', !pname); markField('edit-f-pname', !pname);
+  se('edit-e-pphone', !phoneOk); markField('edit-f-pphone', !phoneOk);
+  se('edit-e-pemerg', !emergOk); markField('edit-f-pemerg', !emergOk);
+  
+  return !!(sname && sdob && branch && cls && pname && phoneOk && emergOk);
+}
+
+async function submitEdit() {
+  if (!validateEditForm()) return;
+  
+  const passcode = localStorage.getItem('tps_teacher_passcode');
+  const s = currentEditingStudent;
+  const btn = document.getElementById('edit-save-btn');
+  
+  const payload = {
+    student_name: fv('edit-f-sname'),
+    branch_id: fv('edit-f-branch'),
+    class_id: fv('edit-f-class'),
+    date_of_birth: fv('edit-f-sdob'),
+    admission_date: fv('edit-f-sadm'),
+    parent_name: fv('edit-f-pname'),
+    phone: fv('edit-f-pphone'),
+    emergency_contact: fv('edit-f-pemerg'),
+    parent_id: s.parent_id // Pass old parent ID to ensure database merges cleanly
+  };
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader-spinner"></span>Saving...';
+  
+  try {
+    const res = await fetch(`${API}/teacher-form/student/${s.student_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Teacher-Passcode': passcode
+      },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    
+    if (res.ok && data.success) {
+      alert('Student record updated successfully.');
+      closeModal();
+      
+      // Refresh directory listings locally
+      loadStudentsDirectory();
+    } else {
+      alert(data.error || 'Server rejected updates.');
+    }
+  } catch(err) {
+    alert('Failed to connect to school server. Please verify connections.');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Save Changes';
+  }
+}
+</script>
+</body>
+</html>
